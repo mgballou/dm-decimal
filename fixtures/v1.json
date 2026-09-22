@@ -1,0 +1,2014 @@
+{
+  "version": "1",
+  "emittedAt": "2026-09-17T05:39:00.617Z",
+  "engineCommit": "85cc6c2",
+  "chain": {
+    "version": "conformance",
+    "tiers": [
+      {
+        "id": "warren",
+        "name": "Warren",
+        "plural": "Warrens",
+        "produces": "minion",
+        "yield": "100",
+        "cycleMs": 60000,
+        "costResource": "evil",
+        "baseCost": "1500",
+        "costRate": 1.089,
+        "overseers": [
+          {
+            "id": "warren-hand",
+            "name": "Fixture Warden",
+            "cost": "600",
+            "effect": {
+              "kind": "automate"
+            }
+          },
+          {
+            "id": "warren-goad",
+            "name": "Fixture Goad",
+            "cost": "2400",
+            "effect": {
+              "kind": "quicken",
+              "factor": 2
+            }
+          },
+          {
+            "id": "warren-glut",
+            "name": "Fixture Glut",
+            "cost": "9600",
+            "effect": {
+              "kind": "swell",
+              "factor": 2
+            }
+          }
+        ],
+        "art": "tier/warren"
+      },
+      {
+        "id": "minion",
+        "name": "Minion",
+        "plural": "Minions",
+        "produces": "evil",
+        "yield": "15",
+        "cycleMs": 24000,
+        "costResource": "evil",
+        "baseCost": "90",
+        "costRate": 1.089,
+        "overseers": [
+          {
+            "id": "minion-hand",
+            "name": "Fixture Taskmaster",
+            "cost": "400",
+            "effect": {
+              "kind": "automate"
+            }
+          },
+          {
+            "id": "minion-goad",
+            "name": "Fixture Goad",
+            "cost": "1600",
+            "effect": {
+              "kind": "quicken",
+              "factor": 2
+            }
+          },
+          {
+            "id": "minion-glut",
+            "name": "Fixture Glut",
+            "cost": "6400",
+            "effect": {
+              "kind": "swell",
+              "factor": 2
+            }
+          }
+        ],
+        "art": "tier/minion"
+      }
+    ],
+    "milestones": [],
+    "achievements": [
+      {
+        "id": "minion-10",
+        "name": "Ten Minions",
+        "description": "Own 10 Minions.",
+        "condition": {
+          "kind": "tier-owned",
+          "tierId": "minion",
+          "atLeast": "10"
+        },
+        "multiplier": 1
+      },
+      {
+        "id": "evil-1e3",
+        "name": "A Thousand Evil",
+        "description": "Earn 1,000 Evil in total.",
+        "condition": {
+          "kind": "lifetime-evil",
+          "atLeast": "1000"
+        },
+        "multiplier": 1
+      },
+      {
+        "id": "souls-500",
+        "name": "Five Hundred Souls",
+        "description": "Hold 500 souls.",
+        "condition": {
+          "kind": "souls",
+          "atLeast": "500"
+        },
+        "multiplier": 1
+      },
+      {
+        "id": "prestige-1",
+        "name": "One Reset",
+        "description": "Claim souls once.",
+        "condition": {
+          "kind": "prestiges",
+          "atLeast": 1
+        },
+        "multiplier": 1
+      },
+      {
+        "id": "smite-1",
+        "name": "One Smite",
+        "description": "Smite once.",
+        "condition": {
+          "kind": "smites",
+          "atLeast": 1
+        },
+        "multiplier": 1
+      }
+    ],
+    "unlockFraction": 0.5,
+    "prestige": {
+      "k": 150,
+      "scale": "1e4",
+      "exponent": 0.5,
+      "perSoul": 0.02
+    },
+    "offlineCapMs": 14400000,
+    "smite": {
+      "cooldownMs": 120000,
+      "apathy": {
+        "perBlow": 1,
+        "cap": 3
+      },
+      "climbGrowth": 2,
+      "upgrades": [
+        {
+          "id": "weight",
+          "name": "Fixture Weight",
+          "base": 2,
+          "unit": "multiplier",
+          "rungs": [
+            {
+              "evil": "1000",
+              "souls": "5",
+              "value": 3
+            },
+            {
+              "evil": "4000",
+              "souls": "10",
+              "value": 4
+            }
+          ]
+        },
+        {
+          "id": "reach",
+          "name": "Fixture Reach",
+          "base": 48000,
+          "unit": "seconds",
+          "rungs": [
+            {
+              "evil": "2000",
+              "souls": "5",
+              "value": 72000
+            }
+          ]
+        },
+        {
+          "id": "forgetting",
+          "name": "Fixture Forgetting",
+          "base": 60000,
+          "unit": "seconds",
+          "rungs": [
+            {
+              "evil": "3000",
+              "souls": "5",
+              "value": 30000
+            }
+          ]
+        },
+        {
+          "id": "restraint",
+          "name": "Fixture Restraint",
+          "base": 0.5,
+          "unit": "amount",
+          "rungs": [
+            {
+              "evil": "5000",
+              "souls": "5",
+              "value": 0.25
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "vectors": [
+    {
+      "label": "one-cycle",
+      "kind": "exact",
+      "tolerance": null,
+      "startState": {
+        "saveVersion": 10,
+        "resources": {
+          "evil": "0"
+        },
+        "gens": {
+          "minion": {
+            "owned": "1",
+            "progressMs": 23900,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "warren": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "legion": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "fortress": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "throne": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          }
+        },
+        "souls": "0",
+        "lifetimeEvil": "0",
+        "earnedAchievements": [],
+        "unlocked": {
+          "minion": true,
+          "warren": false,
+          "legion": false,
+          "fortress": false,
+          "throne": false
+        },
+        "overseers": {
+          "minion": ["minion-hand"],
+          "warren": ["warren-hand"],
+          "legion": [],
+          "fortress": [],
+          "throne": []
+        },
+        "smiteActiveMs": 0,
+        "smiteCooldownMs": 0,
+        "smiteApathy": 0,
+        "smiteBlow": 1,
+        "smiteRungs": {
+          "weight": 0,
+          "reach": 0,
+          "forgetting": 0,
+          "restraint": 0
+        },
+        "smiteKept": {
+          "weight": 0,
+          "reach": 0,
+          "forgetting": 0,
+          "restraint": 0
+        },
+        "soulsSpent": "0",
+        "stats": {
+          "playTimeMs": 0,
+          "smites": 0,
+          "prestiges": 0,
+          "runMs": 0
+        },
+        "savedAtMs": 0
+      },
+      "elapsedMs": 100,
+      "expected": {
+        "endState": {
+          "saveVersion": 10,
+          "resources": {
+            "evil": "15"
+          },
+          "gens": {
+            "minion": {
+              "owned": "1",
+              "progressMs": 0,
+              "lifetimeProduced": "15",
+              "running": false,
+              "purchased": "0"
+            },
+            "warren": {
+              "owned": "0",
+              "progressMs": 100,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            },
+            "legion": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            },
+            "fortress": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            },
+            "throne": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            }
+          },
+          "souls": "0",
+          "lifetimeEvil": "15",
+          "earnedAchievements": [],
+          "unlocked": {
+            "minion": true,
+            "warren": false,
+            "legion": false,
+            "fortress": false,
+            "throne": false
+          },
+          "overseers": {
+            "minion": ["minion-hand"],
+            "warren": ["warren-hand"],
+            "legion": [],
+            "fortress": [],
+            "throne": []
+          },
+          "smiteActiveMs": 0,
+          "smiteCooldownMs": 0,
+          "smiteApathy": 0,
+          "smiteBlow": 1,
+          "smiteRungs": {
+            "weight": 0,
+            "reach": 0,
+            "forgetting": 0,
+            "restraint": 0
+          },
+          "smiteKept": {
+            "weight": 0,
+            "reach": 0,
+            "forgetting": 0,
+            "restraint": 0
+          },
+          "soulsSpent": "0",
+          "stats": {
+            "playTimeMs": 100,
+            "smites": 0,
+            "prestiges": 0,
+            "runMs": 100
+          },
+          "savedAtMs": 0
+        },
+        "produced": {
+          "evil": "15"
+        }
+      }
+    },
+    {
+      "label": "five-minutes-fresh",
+      "kind": "exact",
+      "tolerance": null,
+      "startState": {
+        "saveVersion": 10,
+        "resources": {
+          "evil": "0"
+        },
+        "gens": {
+          "minion": {
+            "owned": "1",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "warren": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "legion": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "fortress": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "throne": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          }
+        },
+        "souls": "0",
+        "lifetimeEvil": "0",
+        "earnedAchievements": [],
+        "unlocked": {
+          "minion": true,
+          "warren": false,
+          "legion": false,
+          "fortress": false,
+          "throne": false
+        },
+        "overseers": {
+          "minion": ["minion-hand"],
+          "warren": ["warren-hand"],
+          "legion": [],
+          "fortress": [],
+          "throne": []
+        },
+        "smiteActiveMs": 0,
+        "smiteCooldownMs": 0,
+        "smiteApathy": 0,
+        "smiteBlow": 1,
+        "smiteRungs": {
+          "weight": 0,
+          "reach": 0,
+          "forgetting": 0,
+          "restraint": 0
+        },
+        "smiteKept": {
+          "weight": 0,
+          "reach": 0,
+          "forgetting": 0,
+          "restraint": 0
+        },
+        "soulsSpent": "0",
+        "stats": {
+          "playTimeMs": 0,
+          "smites": 0,
+          "prestiges": 0,
+          "runMs": 0
+        },
+        "savedAtMs": 0
+      },
+      "elapsedMs": 300000,
+      "expected": {
+        "endState": {
+          "saveVersion": 10,
+          "resources": {
+            "evil": "180"
+          },
+          "gens": {
+            "minion": {
+              "owned": "1",
+              "progressMs": 12000,
+              "lifetimeProduced": "180",
+              "running": false,
+              "purchased": "0"
+            },
+            "warren": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            },
+            "legion": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            },
+            "fortress": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            },
+            "throne": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            }
+          },
+          "souls": "0",
+          "lifetimeEvil": "180",
+          "earnedAchievements": [],
+          "unlocked": {
+            "minion": true,
+            "warren": false,
+            "legion": false,
+            "fortress": false,
+            "throne": false
+          },
+          "overseers": {
+            "minion": ["minion-hand"],
+            "warren": ["warren-hand"],
+            "legion": [],
+            "fortress": [],
+            "throne": []
+          },
+          "smiteActiveMs": 0,
+          "smiteCooldownMs": 0,
+          "smiteApathy": 0,
+          "smiteBlow": 1,
+          "smiteRungs": {
+            "weight": 0,
+            "reach": 0,
+            "forgetting": 0,
+            "restraint": 0
+          },
+          "smiteKept": {
+            "weight": 0,
+            "reach": 0,
+            "forgetting": 0,
+            "restraint": 0
+          },
+          "soulsSpent": "0",
+          "stats": {
+            "playTimeMs": 300000,
+            "smites": 0,
+            "prestiges": 0,
+            "runMs": 300000
+          },
+          "savedAtMs": 0
+        },
+        "produced": {
+          "evil": "180"
+        }
+      }
+    },
+    {
+      "label": "thirty-minute-then-one",
+      "kind": "exact",
+      "tolerance": null,
+      "startState": {
+        "saveVersion": 10,
+        "resources": {
+          "evil": "265821"
+        },
+        "gens": {
+          "minion": {
+            "owned": "67698",
+            "progressMs": 11000,
+            "lifetimeProduced": "12029535",
+            "running": false,
+            "purchased": "97"
+          },
+          "warren": {
+            "owned": "72",
+            "progressMs": 10000,
+            "lifetimeProduced": "67600",
+            "running": false,
+            "purchased": "72"
+          },
+          "legion": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "fortress": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "throne": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          }
+        },
+        "souls": "0",
+        "lifetimeEvil": "12029535",
+        "earnedAchievements": ["minion-10", "evil-1e3"],
+        "unlocked": {
+          "minion": true,
+          "warren": true,
+          "legion": false,
+          "fortress": false,
+          "throne": false
+        },
+        "overseers": {
+          "minion": ["minion-hand", "minion-goad", "minion-glut"],
+          "warren": ["warren-hand", "warren-goad", "warren-glut"],
+          "legion": [],
+          "fortress": [],
+          "throne": []
+        },
+        "smiteActiveMs": 0,
+        "smiteCooldownMs": 0,
+        "smiteApathy": 0,
+        "smiteBlow": 1,
+        "smiteRungs": {
+          "weight": 0,
+          "reach": 0,
+          "forgetting": 0,
+          "restraint": 0
+        },
+        "smiteKept": {
+          "weight": 0,
+          "reach": 0,
+          "forgetting": 0,
+          "restraint": 0
+        },
+        "soulsSpent": "0",
+        "stats": {
+          "playTimeMs": 0,
+          "smites": 0,
+          "prestiges": 0,
+          "runMs": 0
+        },
+        "savedAtMs": 0
+      },
+      "elapsedMs": 60000,
+      "expected": {
+        "endState": {
+          "saveVersion": 10,
+          "resources": {
+            "evil": "11716521"
+          },
+          "gens": {
+            "minion": {
+              "owned": "96498",
+              "progressMs": 11000,
+              "lifetimeProduced": "23480235",
+              "running": false,
+              "purchased": "97"
+            },
+            "warren": {
+              "owned": "72",
+              "progressMs": 10000,
+              "lifetimeProduced": "96400",
+              "running": false,
+              "purchased": "72"
+            },
+            "legion": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            },
+            "fortress": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            },
+            "throne": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            }
+          },
+          "souls": "0",
+          "lifetimeEvil": "23480235",
+          "earnedAchievements": ["minion-10", "evil-1e3"],
+          "unlocked": {
+            "minion": true,
+            "warren": true,
+            "legion": false,
+            "fortress": false,
+            "throne": false
+          },
+          "overseers": {
+            "minion": ["minion-hand", "minion-goad", "minion-glut"],
+            "warren": ["warren-hand", "warren-goad", "warren-glut"],
+            "legion": [],
+            "fortress": [],
+            "throne": []
+          },
+          "smiteActiveMs": 0,
+          "smiteCooldownMs": 0,
+          "smiteApathy": 0,
+          "smiteBlow": 1,
+          "smiteRungs": {
+            "weight": 0,
+            "reach": 0,
+            "forgetting": 0,
+            "restraint": 0
+          },
+          "smiteKept": {
+            "weight": 0,
+            "reach": 0,
+            "forgetting": 0,
+            "restraint": 0
+          },
+          "soulsSpent": "0",
+          "stats": {
+            "playTimeMs": 60000,
+            "smites": 0,
+            "prestiges": 0,
+            "runMs": 60000
+          },
+          "savedAtMs": 0
+        },
+        "produced": {
+          "evil": "11450700",
+          "minion": "28800"
+        }
+      }
+    },
+    {
+      "label": "two-hour-then-one",
+      "kind": "exact",
+      "tolerance": null,
+      "startState": {
+        "saveVersion": 10,
+        "resources": {
+          "evil": "1098579548"
+        },
+        "gens": {
+          "minion": {
+            "owned": "5067595",
+            "progressMs": 11000,
+            "lifetimeProduced": "31948608285",
+            "running": false,
+            "purchased": "194"
+          },
+          "warren": {
+            "owned": "161",
+            "progressMs": 10000,
+            "lifetimeProduced": "5067400",
+            "running": false,
+            "purchased": "161"
+          },
+          "legion": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "fortress": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "throne": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          }
+        },
+        "souls": "0",
+        "lifetimeEvil": "31948608285",
+        "earnedAchievements": ["minion-10", "evil-1e3"],
+        "unlocked": {
+          "minion": true,
+          "warren": true,
+          "legion": false,
+          "fortress": false,
+          "throne": false
+        },
+        "overseers": {
+          "minion": ["minion-hand", "minion-goad", "minion-glut"],
+          "warren": ["warren-hand", "warren-goad", "warren-glut"],
+          "legion": [],
+          "fortress": [],
+          "throne": []
+        },
+        "smiteActiveMs": 0,
+        "smiteCooldownMs": 0,
+        "smiteApathy": 0,
+        "smiteBlow": 1,
+        "smiteRungs": {
+          "weight": 0,
+          "reach": 0,
+          "forgetting": 0,
+          "restraint": 0
+        },
+        "smiteKept": {
+          "weight": 0,
+          "reach": 0,
+          "forgetting": 0,
+          "restraint": 0
+        },
+        "soulsSpent": "0",
+        "stats": {
+          "playTimeMs": 0,
+          "smites": 0,
+          "prestiges": 0,
+          "runMs": 0
+        },
+        "savedAtMs": 0
+      },
+      "elapsedMs": 3600000,
+      "expected": {
+        "endState": {
+          "saveVersion": 10,
+          "resources": {
+            "evil": "63979014548"
+          },
+          "gens": {
+            "minion": {
+              "owned": "8931595",
+              "progressMs": 11000,
+              "lifetimeProduced": "94829043285",
+              "running": false,
+              "purchased": "194"
+            },
+            "warren": {
+              "owned": "161",
+              "progressMs": 10000,
+              "lifetimeProduced": "8931400",
+              "running": false,
+              "purchased": "161"
+            },
+            "legion": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            },
+            "fortress": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            },
+            "throne": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            }
+          },
+          "souls": "0",
+          "lifetimeEvil": "94829043285",
+          "earnedAchievements": ["minion-10", "evil-1e3"],
+          "unlocked": {
+            "minion": true,
+            "warren": true,
+            "legion": false,
+            "fortress": false,
+            "throne": false
+          },
+          "overseers": {
+            "minion": ["minion-hand", "minion-goad", "minion-glut"],
+            "warren": ["warren-hand", "warren-goad", "warren-glut"],
+            "legion": [],
+            "fortress": [],
+            "throne": []
+          },
+          "smiteActiveMs": 0,
+          "smiteCooldownMs": 0,
+          "smiteApathy": 0,
+          "smiteBlow": 1,
+          "smiteRungs": {
+            "weight": 0,
+            "reach": 0,
+            "forgetting": 0,
+            "restraint": 0
+          },
+          "smiteKept": {
+            "weight": 0,
+            "reach": 0,
+            "forgetting": 0,
+            "restraint": 0
+          },
+          "soulsSpent": "0",
+          "stats": {
+            "playTimeMs": 3600000,
+            "smites": 0,
+            "prestiges": 0,
+            "runMs": 3600000
+          },
+          "savedAtMs": 0
+        },
+        "produced": {
+          "evil": "62880435000",
+          "minion": "3864000"
+        }
+      }
+    },
+    {
+      "label": "layer-1-onset",
+      "kind": "toleranced",
+      "tolerance": "1e-11",
+      "startState": {
+        "saveVersion": 10,
+        "resources": {
+          "evil": "4.999999999999999e16"
+        },
+        "gens": {
+          "minion": {
+            "owned": "1000000000000",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "1000000000000"
+          },
+          "warren": {
+            "owned": "100000000",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "100000000"
+          },
+          "legion": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "fortress": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "throne": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          }
+        },
+        "souls": "0",
+        "lifetimeEvil": "4.999999999999999e16",
+        "earnedAchievements": [],
+        "unlocked": {
+          "minion": true,
+          "warren": false,
+          "legion": false,
+          "fortress": false,
+          "throne": false
+        },
+        "overseers": {
+          "minion": ["minion-hand"],
+          "warren": ["warren-hand"],
+          "legion": [],
+          "fortress": [],
+          "throne": []
+        },
+        "smiteActiveMs": 0,
+        "smiteCooldownMs": 0,
+        "smiteApathy": 0,
+        "smiteBlow": 1,
+        "smiteRungs": {
+          "weight": 0,
+          "reach": 0,
+          "forgetting": 0,
+          "restraint": 0
+        },
+        "smiteKept": {
+          "weight": 0,
+          "reach": 0,
+          "forgetting": 0,
+          "restraint": 0
+        },
+        "soulsSpent": "0",
+        "stats": {
+          "playTimeMs": 0,
+          "smites": 0,
+          "prestiges": 0,
+          "runMs": 0
+        },
+        "savedAtMs": 0
+      },
+      "elapsedMs": 14400000,
+      "expected": {
+        "endState": {
+          "saveVersion": 10,
+          "resources": {
+            "evil": "6.976400000000494e16"
+          },
+          "gens": {
+            "minion": {
+              "owned": "3400000000000",
+              "progressMs": 0,
+              "lifetimeProduced": "1.976400000000004e16",
+              "running": false,
+              "purchased": "1000000000000"
+            },
+            "warren": {
+              "owned": "100000000",
+              "progressMs": 0,
+              "lifetimeProduced": "2400000000000",
+              "running": false,
+              "purchased": "100000000"
+            },
+            "legion": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            },
+            "fortress": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            },
+            "throne": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            }
+          },
+          "souls": "0",
+          "lifetimeEvil": "6.976400000000494e16",
+          "earnedAchievements": [],
+          "unlocked": {
+            "minion": true,
+            "warren": false,
+            "legion": false,
+            "fortress": false,
+            "throne": false
+          },
+          "overseers": {
+            "minion": ["minion-hand"],
+            "warren": ["warren-hand"],
+            "legion": [],
+            "fortress": [],
+            "throne": []
+          },
+          "smiteActiveMs": 0,
+          "smiteCooldownMs": 0,
+          "smiteApathy": 0,
+          "smiteBlow": 1,
+          "smiteRungs": {
+            "weight": 0,
+            "reach": 0,
+            "forgetting": 0,
+            "restraint": 0
+          },
+          "smiteKept": {
+            "weight": 0,
+            "reach": 0,
+            "forgetting": 0,
+            "restraint": 0
+          },
+          "soulsSpent": "0",
+          "stats": {
+            "playTimeMs": 14400000,
+            "smites": 0,
+            "prestiges": 0,
+            "runMs": 14400000
+          },
+          "savedAtMs": 0
+        },
+        "produced": {
+          "evil": "1.976400000000004e16",
+          "minion": "2400000000000"
+        }
+      }
+    },
+    {
+      "label": "deep-log-space",
+      "kind": "toleranced",
+      "tolerance": "1e-11",
+      "startState": {
+        "saveVersion": 10,
+        "resources": {
+          "evil": "1e100"
+        },
+        "gens": {
+          "minion": {
+            "owned": "1e80",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "1e80"
+          },
+          "warren": {
+            "owned": "1e60",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "1e60"
+          },
+          "legion": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "fortress": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "throne": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          }
+        },
+        "souls": "0",
+        "lifetimeEvil": "1e100",
+        "earnedAchievements": [],
+        "unlocked": {
+          "minion": true,
+          "warren": false,
+          "legion": false,
+          "fortress": false,
+          "throne": false
+        },
+        "overseers": {
+          "minion": ["minion-hand"],
+          "warren": ["warren-hand"],
+          "legion": [],
+          "fortress": [],
+          "throne": []
+        },
+        "smiteActiveMs": 0,
+        "smiteCooldownMs": 0,
+        "smiteApathy": 0,
+        "smiteBlow": 1,
+        "smiteRungs": {
+          "weight": 0,
+          "reach": 0,
+          "forgetting": 0,
+          "restraint": 0
+        },
+        "smiteKept": {
+          "weight": 0,
+          "reach": 0,
+          "forgetting": 0,
+          "restraint": 0
+        },
+        "soulsSpent": "0",
+        "stats": {
+          "playTimeMs": 0,
+          "smites": 0,
+          "prestiges": 0,
+          "runMs": 0
+        },
+        "savedAtMs": 0
+      },
+      "elapsedMs": 14400000,
+      "expected": {
+        "endState": {
+          "saveVersion": 10,
+          "resources": {
+            "evil": "1e100"
+          },
+          "gens": {
+            "minion": {
+              "owned": "1e80",
+              "progressMs": 0,
+              "lifetimeProduced": "9.000000000000595e83",
+              "running": false,
+              "purchased": "1e80"
+            },
+            "warren": {
+              "owned": "1e60",
+              "progressMs": 0,
+              "lifetimeProduced": "2.399999999999845e64",
+              "running": false,
+              "purchased": "1e60"
+            },
+            "legion": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            },
+            "fortress": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            },
+            "throne": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            }
+          },
+          "souls": "0",
+          "lifetimeEvil": "1e100",
+          "earnedAchievements": [],
+          "unlocked": {
+            "minion": true,
+            "warren": false,
+            "legion": false,
+            "fortress": false,
+            "throne": false
+          },
+          "overseers": {
+            "minion": ["minion-hand"],
+            "warren": ["warren-hand"],
+            "legion": [],
+            "fortress": [],
+            "throne": []
+          },
+          "smiteActiveMs": 0,
+          "smiteCooldownMs": 0,
+          "smiteApathy": 0,
+          "smiteBlow": 1,
+          "smiteRungs": {
+            "weight": 0,
+            "reach": 0,
+            "forgetting": 0,
+            "restraint": 0
+          },
+          "smiteKept": {
+            "weight": 0,
+            "reach": 0,
+            "forgetting": 0,
+            "restraint": 0
+          },
+          "soulsSpent": "0",
+          "stats": {
+            "playTimeMs": 14400000,
+            "smites": 0,
+            "prestiges": 0,
+            "runMs": 14400000
+          },
+          "savedAtMs": 0
+        },
+        "produced": {
+          "evil": "9.000000000000595e83",
+          "minion": "2.399999999999845e64"
+        }
+      }
+    },
+    {
+      "label": "post-prestige",
+      "kind": "exact",
+      "tolerance": null,
+      "startState": {
+        "saveVersion": 10,
+        "resources": {
+          "evil": "0"
+        },
+        "gens": {
+          "minion": {
+            "owned": "1",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "warren": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "legion": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "fortress": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "throne": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          }
+        },
+        "souls": "84229",
+        "lifetimeEvil": "3164393565",
+        "earnedAchievements": ["minion-10", "evil-1e3"],
+        "unlocked": {
+          "minion": true,
+          "warren": true,
+          "legion": false,
+          "fortress": false,
+          "throne": false
+        },
+        "overseers": {
+          "minion": [],
+          "warren": [],
+          "legion": [],
+          "fortress": [],
+          "throne": []
+        },
+        "smiteActiveMs": 0,
+        "smiteCooldownMs": 0,
+        "smiteApathy": 0,
+        "smiteBlow": 1,
+        "smiteRungs": {
+          "weight": 0,
+          "reach": 0,
+          "forgetting": 0,
+          "restraint": 0
+        },
+        "smiteKept": {
+          "weight": 0,
+          "reach": 0,
+          "forgetting": 0,
+          "restraint": 0
+        },
+        "soulsSpent": "0",
+        "stats": {
+          "playTimeMs": 0,
+          "smites": 0,
+          "prestiges": 1,
+          "runMs": 0
+        },
+        "savedAtMs": 0
+      },
+      "elapsedMs": 3600000,
+      "expected": {
+        "endState": {
+          "saveVersion": 10,
+          "resources": {
+            "evil": "0"
+          },
+          "gens": {
+            "minion": {
+              "owned": "1",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            },
+            "warren": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            },
+            "legion": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            },
+            "fortress": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            },
+            "throne": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            }
+          },
+          "souls": "84229",
+          "lifetimeEvil": "3164393565",
+          "earnedAchievements": ["minion-10", "evil-1e3"],
+          "unlocked": {
+            "minion": true,
+            "warren": true,
+            "legion": false,
+            "fortress": false,
+            "throne": false
+          },
+          "overseers": {
+            "minion": [],
+            "warren": [],
+            "legion": [],
+            "fortress": [],
+            "throne": []
+          },
+          "smiteActiveMs": 0,
+          "smiteCooldownMs": 0,
+          "smiteApathy": 0,
+          "smiteBlow": 1,
+          "smiteRungs": {
+            "weight": 0,
+            "reach": 0,
+            "forgetting": 0,
+            "restraint": 0
+          },
+          "smiteKept": {
+            "weight": 0,
+            "reach": 0,
+            "forgetting": 0,
+            "restraint": 0
+          },
+          "soulsSpent": "0",
+          "stats": {
+            "playTimeMs": 3600000,
+            "smites": 0,
+            "prestiges": 1,
+            "runMs": 3600000
+          },
+          "savedAtMs": 0
+        },
+        "produced": {}
+      }
+    },
+    {
+      "label": "edge-exact",
+      "kind": "exact",
+      "tolerance": null,
+      "startState": {
+        "saveVersion": 10,
+        "resources": {
+          "evil": "8999000000000000"
+        },
+        "gens": {
+          "minion": {
+            "owned": "1",
+            "progressMs": 23900,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "warren": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "legion": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "fortress": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "throne": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          }
+        },
+        "souls": "0",
+        "lifetimeEvil": "8999000000000000",
+        "earnedAchievements": [],
+        "unlocked": {
+          "minion": true,
+          "warren": false,
+          "legion": false,
+          "fortress": false,
+          "throne": false
+        },
+        "overseers": {
+          "minion": ["minion-hand"],
+          "warren": ["warren-hand"],
+          "legion": [],
+          "fortress": [],
+          "throne": []
+        },
+        "smiteActiveMs": 0,
+        "smiteCooldownMs": 0,
+        "smiteApathy": 0,
+        "smiteBlow": 1,
+        "smiteRungs": {
+          "weight": 0,
+          "reach": 0,
+          "forgetting": 0,
+          "restraint": 0
+        },
+        "smiteKept": {
+          "weight": 0,
+          "reach": 0,
+          "forgetting": 0,
+          "restraint": 0
+        },
+        "soulsSpent": "0",
+        "stats": {
+          "playTimeMs": 0,
+          "smites": 0,
+          "prestiges": 0,
+          "runMs": 0
+        },
+        "savedAtMs": 0
+      },
+      "elapsedMs": 100,
+      "expected": {
+        "endState": {
+          "saveVersion": 10,
+          "resources": {
+            "evil": "8999000000000015"
+          },
+          "gens": {
+            "minion": {
+              "owned": "1",
+              "progressMs": 0,
+              "lifetimeProduced": "15",
+              "running": false,
+              "purchased": "0"
+            },
+            "warren": {
+              "owned": "0",
+              "progressMs": 100,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            },
+            "legion": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            },
+            "fortress": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            },
+            "throne": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            }
+          },
+          "souls": "0",
+          "lifetimeEvil": "8999000000000015",
+          "earnedAchievements": [],
+          "unlocked": {
+            "minion": true,
+            "warren": false,
+            "legion": false,
+            "fortress": false,
+            "throne": false
+          },
+          "overseers": {
+            "minion": ["minion-hand"],
+            "warren": ["warren-hand"],
+            "legion": [],
+            "fortress": [],
+            "throne": []
+          },
+          "smiteActiveMs": 0,
+          "smiteCooldownMs": 0,
+          "smiteApathy": 0,
+          "smiteBlow": 1,
+          "smiteRungs": {
+            "weight": 0,
+            "reach": 0,
+            "forgetting": 0,
+            "restraint": 0
+          },
+          "smiteKept": {
+            "weight": 0,
+            "reach": 0,
+            "forgetting": 0,
+            "restraint": 0
+          },
+          "soulsSpent": "0",
+          "stats": {
+            "playTimeMs": 100,
+            "smites": 0,
+            "prestiges": 0,
+            "runMs": 100
+          },
+          "savedAtMs": 0
+        },
+        "produced": {
+          "evil": "15"
+        }
+      }
+    },
+    {
+      "label": "edge-toleranced",
+      "kind": "toleranced",
+      "tolerance": "1e-11",
+      "startState": {
+        "saveVersion": 10,
+        "resources": {
+          "evil": "9.000000000000007e15"
+        },
+        "gens": {
+          "minion": {
+            "owned": "1",
+            "progressMs": 23900,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "warren": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "legion": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "fortress": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "throne": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          }
+        },
+        "souls": "0",
+        "lifetimeEvil": "9.000000000000007e15",
+        "earnedAchievements": [],
+        "unlocked": {
+          "minion": true,
+          "warren": false,
+          "legion": false,
+          "fortress": false,
+          "throne": false
+        },
+        "overseers": {
+          "minion": ["minion-hand"],
+          "warren": ["warren-hand"],
+          "legion": [],
+          "fortress": [],
+          "throne": []
+        },
+        "smiteActiveMs": 0,
+        "smiteCooldownMs": 0,
+        "smiteApathy": 0,
+        "smiteBlow": 1,
+        "smiteRungs": {
+          "weight": 0,
+          "reach": 0,
+          "forgetting": 0,
+          "restraint": 0
+        },
+        "smiteKept": {
+          "weight": 0,
+          "reach": 0,
+          "forgetting": 0,
+          "restraint": 0
+        },
+        "soulsSpent": "0",
+        "stats": {
+          "playTimeMs": 0,
+          "smites": 0,
+          "prestiges": 0,
+          "runMs": 0
+        },
+        "savedAtMs": 0
+      },
+      "elapsedMs": 100,
+      "expected": {
+        "endState": {
+          "saveVersion": 10,
+          "resources": {
+            "evil": "9.000000000000007e15"
+          },
+          "gens": {
+            "minion": {
+              "owned": "1",
+              "progressMs": 0,
+              "lifetimeProduced": "15",
+              "running": false,
+              "purchased": "0"
+            },
+            "warren": {
+              "owned": "0",
+              "progressMs": 100,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            },
+            "legion": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            },
+            "fortress": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            },
+            "throne": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            }
+          },
+          "souls": "0",
+          "lifetimeEvil": "9.000000000000007e15",
+          "earnedAchievements": [],
+          "unlocked": {
+            "minion": true,
+            "warren": false,
+            "legion": false,
+            "fortress": false,
+            "throne": false
+          },
+          "overseers": {
+            "minion": ["minion-hand"],
+            "warren": ["warren-hand"],
+            "legion": [],
+            "fortress": [],
+            "throne": []
+          },
+          "smiteActiveMs": 0,
+          "smiteCooldownMs": 0,
+          "smiteApathy": 0,
+          "smiteBlow": 1,
+          "smiteRungs": {
+            "weight": 0,
+            "reach": 0,
+            "forgetting": 0,
+            "restraint": 0
+          },
+          "smiteKept": {
+            "weight": 0,
+            "reach": 0,
+            "forgetting": 0,
+            "restraint": 0
+          },
+          "soulsSpent": "0",
+          "stats": {
+            "playTimeMs": 100,
+            "smites": 0,
+            "prestiges": 0,
+            "runMs": 100
+          },
+          "savedAtMs": 0
+        },
+        "produced": {
+          "evil": "15"
+        }
+      }
+    },
+    {
+      "label": "intermediate-log-space",
+      "kind": "toleranced",
+      "tolerance": "1e-11",
+      "startState": {
+        "saveVersion": 10,
+        "resources": {
+          "evil": "1e30"
+        },
+        "gens": {
+          "minion": {
+            "owned": "1e20",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "1e20"
+          },
+          "warren": {
+            "owned": "1000000000000",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "1000000000000"
+          },
+          "legion": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "fortress": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          },
+          "throne": {
+            "owned": "0",
+            "progressMs": 0,
+            "lifetimeProduced": "0",
+            "running": false,
+            "purchased": "0"
+          }
+        },
+        "souls": "0",
+        "lifetimeEvil": "1e30",
+        "earnedAchievements": [],
+        "unlocked": {
+          "minion": true,
+          "warren": false,
+          "legion": false,
+          "fortress": false,
+          "throne": false
+        },
+        "overseers": {
+          "minion": ["minion-hand"],
+          "warren": ["warren-hand"],
+          "legion": [],
+          "fortress": [],
+          "throne": []
+        },
+        "smiteActiveMs": 0,
+        "smiteCooldownMs": 0,
+        "smiteApathy": 0,
+        "smiteBlow": 1,
+        "smiteRungs": {
+          "weight": 0,
+          "reach": 0,
+          "forgetting": 0,
+          "restraint": 0
+        },
+        "smiteKept": {
+          "weight": 0,
+          "reach": 0,
+          "forgetting": 0,
+          "restraint": 0
+        },
+        "soulsSpent": "0",
+        "stats": {
+          "playTimeMs": 0,
+          "smites": 0,
+          "prestiges": 0,
+          "runMs": 0
+        },
+        "savedAtMs": 0
+      },
+      "elapsedMs": 14400000,
+      "expected": {
+        "endState": {
+          "saveVersion": 10,
+          "resources": {
+            "evil": "1.0000009001075012e30"
+          },
+          "gens": {
+            "minion": {
+              "owned": "1.0002400000001146e20",
+              "progressMs": 0,
+              "lifetimeProduced": "9.001076400000477e23",
+              "running": false,
+              "purchased": "1e20"
+            },
+            "warren": {
+              "owned": "1000000000000",
+              "progressMs": 0,
+              "lifetimeProduced": "2.4000000000000608e16",
+              "running": false,
+              "purchased": "1000000000000"
+            },
+            "legion": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            },
+            "fortress": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            },
+            "throne": {
+              "owned": "0",
+              "progressMs": 0,
+              "lifetimeProduced": "0",
+              "running": false,
+              "purchased": "0"
+            }
+          },
+          "souls": "0",
+          "lifetimeEvil": "1.0000009001075012e30",
+          "earnedAchievements": [],
+          "unlocked": {
+            "minion": true,
+            "warren": false,
+            "legion": false,
+            "fortress": false,
+            "throne": false
+          },
+          "overseers": {
+            "minion": ["minion-hand"],
+            "warren": ["warren-hand"],
+            "legion": [],
+            "fortress": [],
+            "throne": []
+          },
+          "smiteActiveMs": 0,
+          "smiteCooldownMs": 0,
+          "smiteApathy": 0,
+          "smiteBlow": 1,
+          "smiteRungs": {
+            "weight": 0,
+            "reach": 0,
+            "forgetting": 0,
+            "restraint": 0
+          },
+          "smiteKept": {
+            "weight": 0,
+            "reach": 0,
+            "forgetting": 0,
+            "restraint": 0
+          },
+          "soulsSpent": "0",
+          "stats": {
+            "playTimeMs": 14400000,
+            "smites": 0,
+            "prestiges": 0,
+            "runMs": 14400000
+          },
+          "savedAtMs": 0
+        },
+        "produced": {
+          "evil": "9.001076400000477e23",
+          "minion": "2.4000000000000608e16"
+        }
+      }
+    }
+  ]
+}

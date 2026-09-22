@@ -1,0 +1,33 @@
+{
+    "name": "mgballou/dm-decimal",
+    "description": "A PHP transliteration of break_eternity's three-field Decimal with V8-compatible log10/pow10.",
+    "type": "library",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.4"
+    },
+    "require-dev": {
+        "pestphp/pest": "^4.0",
+        "phpstan/phpstan": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "DreadMajesty\\Decimal\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DreadMajesty\\Decimal\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "pest",
+        "types:check": "phpstan analyse --memory-limit=2G"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "stable"
+}
