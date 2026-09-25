@@ -1,14 +1,25 @@
 {
     "name": "mgballou/dm-decimal",
-    "description": "A PHP transliteration of break_eternity's three-field Decimal with V8-compatible log10/pow10.",
+    "description": "A PHP port of break_eternity's three-field Decimal, held to the Dread Majesty engine's conformance vectors.",
     "type": "library",
-    "license": "proprietary",
+    "keywords": ["decimal", "break_eternity", "incremental", "idle-game", "big-numbers"],
+    "homepage": "https://github.com/mgballou/dm-decimal",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Matthew Ballou"
+        }
+    ],
     "require": {
-        "php": "^8.4"
+        "php": "^8.3"
     },
     "require-dev": {
+        "illuminate/database": "^12.0 || ^13.0",
         "pestphp/pest": "^4.0",
         "phpstan/phpstan": "^2.0"
+    },
+    "suggest": {
+        "illuminate/database": "Required to store a Decimal on an Eloquent model with DecimalCast."
     },
     "autoload": {
         "psr-4": {
@@ -22,12 +33,15 @@
     },
     "scripts": {
         "test": "pest",
+        "test:conformance": "pest --testsuite=Conformance",
         "types:check": "phpstan analyse --memory-limit=2G"
     },
     "config": {
+        "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true
         }
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }
