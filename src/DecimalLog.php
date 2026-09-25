@@ -5,17 +5,14 @@ declare(strict_types=1);
 namespace DreadMajesty\Decimal;
 
 /**
- * V8-compatible log10 and pow10 on IEEE-754 doubles.
+ * The log10 and pow10 that the arithmetic delegates to.
  *
- * PHP's built-in log10() and pow(10, x) call the platform libm, which
- * disagrees with V8's implementations on 3–9% of inputs. This class
- * carries the same algorithms V8 uses so the PHP port produces the
- * same double outputs as the TypeScript engine.
- *
- * For the initial implementation: we use PHP's native functions and
- * verify against the conformance vectors. The toleranced vectors
- * allow 1e-11 relative error, which should absorb the libm differences
- * across the step counts in the test suite.
+ * break_eternity.js calls V8's Math.log10() and Math.pow(10, x). PHP's
+ * log10() and 10 ** x call the platform libm instead, which disagrees
+ * with V8 on 3–9% of inputs by 1–2 ULP. For now both methods use PHP's
+ * native functions; the toleranced conformance vectors allow 1e-11
+ * relative error, which absorbs that drift. A bit-identical port of
+ * V8's ieee754.cc belongs here and is not yet written.
  */
 final class DecimalLog
 {
