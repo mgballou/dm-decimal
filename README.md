@@ -67,19 +67,33 @@ TypeScript produced.
 | Vectors | Match | What they reach |
 |---|---|---|
 | 6 | exact, string for string | layer 0: first cycle, five minutes, two hours, after a prestige, one edge case |
-| 4 | within 1e-11 relative | log space: three runs that climb past 9e15 (as far as 1e100), one edge case |
+| 4 | exact in value, and within 1e-11 relative | log space: three runs that climb past 9e15 (as far as 1e100), one edge case |
+
+The four log-space vectors match value for value, but not always string for
+string: PHP prints `9000000000000007` where JavaScript prints
+`9.000000000000007e15`, and it prints 17 digits where JavaScript stops at the
+fewest that round-trip.
 
 CI runs all ten on PHP 8.3 and 8.4, next to the unit tests and PHPStan at level 9.
 
-## Where it does not match V8 yet
+## How log10 and pow10 match V8
 
 break_eternity.js calls V8's `Math.log10` and `Math.pow(10, x)`. PHP's `log10()`
-and `10 ** $x` go to the platform's libm, which gives a different last bit on
-3–9% of inputs. `DecimalLog` uses PHP's own functions for now, so the four
-toleranced vectors pass on the tolerance, not bit for bit. The engine repo's
-[log10/pow10 agreement](https://github.com/mgballou/dread-majesty/blob/main/docs/superpowers/plans/2026-09-18-deployment-and-agreement.md)
-sets bit-identical output as the target. Porting V8's `ieee754.cc` into
-`DecimalLog` closes the gap, and those four vectors can then be held to exact.
+and `10 ** $x` go to the platform's libm, which lands on a different double for
+about one `pow10` input in ten. So `DecimalLog` runs V8's own fdlibm code
+instead, transliterated in `V8Math` from V8 12.4, the V8 in Node 22, which the
+engine pins. That meets the engine repo's
+[log10/pow10 agreement](https://github.com/mgballou/dread-majesty/blob/main/docs/superpowers/plans/2026-09-18-deployment-and-agreement.md),
+which sets bit-identical output as the target.
+
+Plain PHP arithmetic gives the same bits on every platform. On 67,000 inputs,
+`V8Math` matched Node 22's x64 build on every one. Node 22's arm64 build lets
+the compiler fuse some multiply-adds and lands one ULP away on about one `pow10`
+input in two thousand; no vector here hits one of those.
+
+Node 24 carries V8 13, which sends `Math.pow` to the platform's libm. If the
+engine moves to Node 24, the vectors change and `pow10` here must change with
+them.
 
 ## Run it
 
@@ -96,4 +110,5 @@ To take new vectors, run `pnpm conformance:emit` in `dread-majesty` and copy
 ## License
 
 MIT. `Decimal` and `DecimalMath` port break_eternity.js, © 2019 Timothy Stiles,
-also MIT; both notices are in [LICENSE](LICENSE).
+also MIT. `V8Math` ports V8's fdlibm code, under Sun's fdlibm notice and V8's
+BSD license. All the notices are in [LICENSE](LICENSE).

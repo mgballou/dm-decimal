@@ -7,8 +7,9 @@ namespace DreadMajesty\Decimal\Tests\Unit;
 use DreadMajesty\Decimal\DecimalLog;
 
 // Each expected value is what Node 22.23.2 (V8 12.4.254, the engine's pinned
-// Node) returns for Math.log10(x) or Math.pow(10, x). The inputs are ones where
-// the platform libm lands on a different double.
+// Node) returns for Math.log10(x) or Math.pow(10, x), on both its x64 and arm64
+// builds. The inputs are ones where the platform libm lands on a different
+// double, or where textbook fdlibm does.
 
 function bits(float $x): string
 {
@@ -33,6 +34,11 @@ test('pow10 lands on V8\'s double', function (float $x, float $v8): void {
     [2.3225647790434323, 210.16712293932147],
     [-298.62631230554734, 2.364218952325573E-299],
     [-304.8080255839016, 1.5558739737535643E-305],
+    // Textbook fdlibm lands 1 ULP low on these; V8 groups one division differently.
+    [0.700651200101791, 5.01939299339832],
+    [14.079644363035982, 120128032205324.69],
+    // A subnormal result, where scaling by 2^n in one step would give 0.
+    [-323.4625878044564, 5.0E-324],
 ]);
 
 test('log10 and pow10 keep the edge cases', function (): void {
