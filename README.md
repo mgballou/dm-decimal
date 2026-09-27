@@ -103,7 +103,12 @@ The vectors reach only the operations the engine's ten scenarios happen to use.
 seeded cases across every operation listed above, with inputs at layer 0, layer 1
 and layer 2 and the edge cases (zero, negatives, 1e308 and past it, infinity). Each
 case records break_eternity.js 2.1.3's result, and the test holds the PHP result to
-it in sign, layer and mag, bit for bit.
+it in sign, layer and mag, bit for bit. All 5,902 match. A case that ever cannot
+match goes in the test's `INEXACT` list by name, with the reason.
+
+That includes break_eternity's quirks at infinity, which this package keeps so a
+server agrees with a client: `-1 * Infinity` is `Infinity`, `0 * Infinity` is
+`Infinity`, and `Infinity * 0` is NaN.
 
 break_eternity.js keeps a NaN or infinite layer; this package stores the layer as
 an `int`, so the test reads a NaN layer as `Decimal::nan()`'s 0 and an infinite
