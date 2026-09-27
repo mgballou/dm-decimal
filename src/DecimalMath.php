@@ -239,26 +239,17 @@ final class DecimalMath
             );
         }
 
-        // Layer 2 cases: use log-addition
-        if ($big->layer === 2 && $small->layer === 1) {
-            $newMag = Decimal::fromComponents(1.0, $big->layer - 1, $big->mag);
-            $smallMag = Decimal::fromComponents(1.0, $small->layer - 1, $small->mag);
-
-            return Decimal::fromComponents(
-                $resultSign,
-                $big->layer,
-                self::add($newMag, $smallMag)->mag,
+        // Layer 2 times layer 1 or 2: add the mags one layer down, keeping their signs
+        if ($big->layer === 2 && ($small->layer === 1 || $small->layer === 2)) {
+            $newMag = self::add(
+                Decimal::fromComponents($big->mag <=> 0.0, $big->layer - 1, abs($big->mag)),
+                Decimal::fromComponents($small->mag <=> 0.0, $small->layer - 1, abs($small->mag)),
             );
-        }
-
-        if ($big->layer === 2 && $small->layer === 2) {
-            $newMag = Decimal::fromComponents(1.0, $big->layer - 1, $big->mag);
-            $smallMag = Decimal::fromComponents(1.0, $small->layer - 1, $small->mag);
 
             return Decimal::fromComponents(
                 $resultSign,
-                $big->layer,
-                self::add($newMag, $smallMag)->mag,
+                $newMag->layer + 1,
+                $newMag->sign * $newMag->mag,
             );
         }
 
