@@ -42,11 +42,30 @@ echo $b->mag;     // 600
 `sign`, `layer` and `mag`. It needs `illuminate/database`; the rest of the package
 needs nothing but PHP.
 
-```sh
-composer require mgballou/dm-decimal
+## Install
+
+The package is not on Packagist yet, so point Composer at this repository in
+your `composer.json`:
+
+```json
+"repositories": [
+    {
+        "type": "vcs",
+        "url": "https://github.com/mgballou/dm-decimal",
+        "no-api": true
+    }
+]
 ```
 
-PHP 8.3 or 8.4.
+`no-api` has Composer clone over plain HTTPS, so it needs no GitHub token. Then:
+
+```sh
+composer require mgballou/dm-decimal:dev-main
+```
+
+Once it reaches Packagist, `composer require mgballou/dm-decimal` alone will do.
+
+PHP 8.3 or later; CI tests 8.3 and 8.4.
 
 ## How the vectors tie it to the engine
 
@@ -56,8 +75,9 @@ engine is TypeScript on break_eternity.js. The engine's
 plays ten fixed scenarios through its own `catchUp` loop and writes each start
 state, elapsed time and end state to
 [`vectors/v1.json`](https://github.com/mgballou/dread-majesty/blob/main/packages/engine/conformance/vectors/v1.json).
-This repo carries that file unchanged as `fixtures/v1.json`, emitted at engine
-commit [`85cc6c2`](https://github.com/mgballou/dread-majesty/commit/85cc6c2).
+This repo carries that file unchanged as `fixtures/v1.json`. The file records
+engine commit `85cc6c2`, the commit it was emitted on top of; it landed in
+[`04141ac`](https://github.com/mgballou/dread-majesty/commit/04141ac).
 
 `tests/Conformance/ConformanceEngine.php` ports the same catch-up loop to PHP
 with every sum done by this package. Each test loads a start state, runs the loop
@@ -66,7 +86,7 @@ TypeScript produced.
 
 | Vectors | Match | What they reach |
 |---|---|---|
-| 6 | exact, string for string | layer 0: first cycle, five minutes, two hours, after a prestige, one edge case |
+| 6 | exact, string for string | layer 0: first cycle, five minutes, thirty minutes, two hours, after a prestige, one edge case |
 | 4 | exact in value, and within 1e-11 relative | log space: three runs that climb past 9e15 (as far as 1e100), one edge case |
 
 The four log-space vectors match value for value, but not always string for
@@ -81,8 +101,9 @@ CI runs all ten on PHP 8.3 and 8.4, next to the unit tests and PHPStan at level 
 break_eternity.js calls V8's `Math.log10` and `Math.pow(10, x)`. PHP's `log10()`
 and `10 ** $x` go to the platform's libm, which lands on a different double for
 about one `pow10` input in ten. So `DecimalLog` runs V8's own fdlibm code
-instead, transliterated in `V8Math` from V8 12.4, the V8 in Node 22, which the
-engine pins. That meets the engine repo's
+instead, transliterated in `V8Math` from V8 12.4, the V8 in Node 22. The engine's
+`.nvmrc` names Node 22, and the vectors were emitted under it. (The engine's CI
+runs Node 24, but it checks the log-space vectors only to 1e-11.) That meets the engine repo's
 [log10/pow10 agreement](https://github.com/mgballou/dread-majesty/blob/main/docs/superpowers/plans/2026-09-18-deployment-and-agreement.md),
 which sets bit-identical output as the target.
 
@@ -92,8 +113,8 @@ the compiler fuse some multiply-adds and lands one ULP away on about one `pow10`
 input in two thousand; no vector here hits one of those.
 
 Node 24 carries V8 13, which sends `Math.pow` to the platform's libm. If the
-engine moves to Node 24, the vectors change and `pow10` here must change with
-them.
+engine emits its vectors under Node 24, they change and `pow10` here must change
+with them.
 
 ## Run it
 
