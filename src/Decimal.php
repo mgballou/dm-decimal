@@ -477,7 +477,8 @@ final class Decimal implements Stringable
      *
      * With serialize_precision at -1, var_export() prints the same shortest
      * digits V8 does (zend_dtoa's mode 0), but in its own layout, which
-     * switches to exponent form past 15 digits. Only the digits are kept.
+     * switches to exponent form from 1e17 and below 1e-4 and writes 1.0E+25.
+     * Only the digits are kept.
      *
      * @return array{string, int}
      */
