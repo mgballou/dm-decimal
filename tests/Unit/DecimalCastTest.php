@@ -144,3 +144,12 @@ test('a JSON column missing a field refuses to read rather than turning into zer
     'no sign' => ['{"layer":0,"mag":42}'],
     'empty object' => ['{}'],
 ])->throws(\UnexpectedValueException::class, 'amount');
+
+test('a JSON column with a field that is not a number refuses to read', function (string $column): void {
+    castInsertRawAndRead($column);
+})->with([
+    'mag as a word' => ['{"sign":1,"layer":0,"mag":"lots"}'],
+    'sign as null' => ['{"sign":null,"layer":0,"mag":42}'],
+    'layer as a fraction' => ['{"sign":1,"layer":0.5,"mag":42}'],
+    'layer as a string' => ['{"sign":1,"layer":"1","mag":42}'],
+])->throws(\UnexpectedValueException::class, 'amount');
