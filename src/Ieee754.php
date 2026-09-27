@@ -64,18 +64,6 @@ final class Ieee754
     }
 
     /**
-     * Reassemble a double from high and low 32-bit words.
-     */
-    public static function insertWords(int $hi, int $lo): float
-    {
-        $bytes = pack('N', $hi & 0xFFFFFFFF) . pack('N', $lo & 0xFFFFFFFF);
-        /** @var array{1: float} $arr */
-        $arr = unpack('E', $bytes);
-
-        return $arr[1];
-    }
-
-    /**
      * Replace the high 32 bits of a double, keeping the low 32 bits.
      */
     public static function setHighWord(float $d, int $v): float

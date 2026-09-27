@@ -90,13 +90,6 @@ final class DecimalMath
             return Decimal::nan();
         }
 
-        if (! is_finite($a->layer)) {
-            return $a;
-        }
-        if (! is_finite($b->layer)) {
-            return $b;
-        }
-
         if ($a->sign === 0.0) {
             return $b;
         }

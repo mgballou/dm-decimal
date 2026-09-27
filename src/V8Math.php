@@ -42,7 +42,7 @@ final class V8Math
      *
      * Transliterated from V8 12.4.254 ieee754.cc lines 1638-1717.
      */
-    public static function log(float $x): float
+    private static function log(float $x): float
     {
         $ln2_hi = 6.93147180369123816490e-01;
         $ln2_lo = 1.90821492927058770002e-10;
