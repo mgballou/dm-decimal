@@ -59,6 +59,29 @@ test('toString matches JavaScript for layer 0 integers', function (): void {
     expect((string) Decimal::fromNumber(1500))->toBe('1500');
 });
 
+// Each string is what break_eternity.js 2.1.3 prints on Node 22.
+test('toString matches JavaScript where Number#toString changes form', function (): void {
+    expect((string) Decimal::fromNumber(1e-6))->toBe('0.000001');
+    expect((string) Decimal::fromComponentsNoNormalize(-1.0, 0, 1e-7))->toBe('-1e-7');
+    expect((string) Decimal::fromComponentsNoNormalize(1.0, 0, 5e-324))->toBe('5e-324');
+    expect((string) Decimal::fromNumber(123456789012345680))->toBe('1.2345678901234576e17');
+    expect((string) Decimal::fromComponents(-1.0, 1, -400.5))->toBe('-3.1622776601683795e-401');
+    expect((string) Decimal::fromComponents(1.0, 1, 1e21))->toBe('ee21');
+    expect((string) Decimal::fromComponents(1.0, 6, 1.5))->toBe('eeeee31.622776601683793');
+    expect((string) Decimal::fromComponentsNoNormalize(1.0, 6, 1.5))->toBe('(e^6)1.5');
+});
+
+test('toString prints shortest digits whatever serialize_precision holds', function (): void {
+    $saved = ini_set('serialize_precision', '17');
+
+    try {
+        expect((string) Decimal::fromNumber(0.1))->toBe('0.1');
+        expect(ini_get('serialize_precision'))->toBe('17');
+    } finally {
+        ini_set('serialize_precision', (string) $saved);
+    }
+});
+
 test('toNumber round trips for layer 0', function (): void {
     $d = Decimal::fromNumber(3.14159);
     expect($d->toNumber())->toBe(3.14159);

@@ -20,6 +20,8 @@ final class Decimal implements Stringable
 
     private const int NUMBER_EXP_MIN = -324;
 
+    private const int MAX_ES_IN_A_ROW = 5;
+
     public readonly float $sign;
 
     public readonly int $layer;
@@ -231,6 +233,12 @@ final class Decimal implements Stringable
             : 0.0;
     }
 
+    /**
+     * Print this number as break_eternity.js's toString() does: layer 0 as a
+     * plain JavaScript number between 1e-7 and 1e21, layer 1 (and layer 0
+     * outside that range) as mantissa, "e", exponent, layers 2 to 5 as that
+     * many e's before the mag, and higher layers as "(e^N)" before it.
+     */
     public function __toString(): string
     {
         if ($this->isNan()) {
@@ -245,45 +253,20 @@ final class Decimal implements Stringable
             return '0';
         }
 
-        if ($this->layer === 0) {
-            $val = $this->sign * $this->mag;
-            if (abs($val) < 1e21 && abs($val) > 1e-7) {
-                return self::formatFloat($val);
-            }
-
-            return $this->mantissaExponentString();
+        if ($this->layer === 0 && $this->mag < 1e21 && $this->mag > 1e-7) {
+            return self::jsNumber($this->sign * $this->mag);
         }
 
-        if ($this->layer === 1) {
-            return $this->mantissaExponentString();
+        if ($this->layer <= 1) {
+            return self::jsNumber($this->mantissa()) . 'e' . self::jsNumber($this->exponent());
         }
 
-        // layer >= 2
         $prefix = $this->sign === -1.0 ? '-' : '';
-        if ($this->layer <= 5) {
-            return $prefix . str_repeat('e', $this->layer) . self::formatFloat($this->mag);
+        if ($this->layer <= self::MAX_ES_IN_A_ROW) {
+            return $prefix . str_repeat('e', $this->layer) . self::jsNumber($this->mag);
         }
 
-        return $prefix . '(e^' . $this->layer . ')' . self::formatFloat($this->mag);
-    }
-
-    private function mantissaExponentString(): string
-    {
-        if ($this->layer === 0) {
-            $e = (int) floor(DecimalLog::log10($this->mag));
-            $m = $this->sign * $this->mag / self::powerOf10($e);
-
-            return self::formatFloat($m) . 'e' . $e;
-        }
-
-        if ($this->layer === 1) {
-            $e = (int) floor($this->mag);
-            $m = $this->sign * DecimalLog::pow10($this->mag - $e);
-
-            return self::formatFloat($m) . 'e' . $e;
-        }
-
-        return ($this->sign === -1.0 ? '-' : '') . str_repeat('e', $this->layer) . self::formatFloat($this->mag);
+        return $prefix . '(e^' . $this->layer . ')' . self::jsNumber($this->mag);
     }
 
     /**
@@ -294,6 +277,12 @@ final class Decimal implements Stringable
         if ($this->layer === 0) {
             if ($this->mag === 0.0) {
                 return 0.0;
+            }
+
+            // powerOf10() stops at 1e-323, so break_eternity.js reads the
+            // smallest denormal's mantissa as 5 by hand.
+            if ($this->mag === 5e-324) {
+                return $this->sign * 5;
             }
 
             $e = (int) floor(DecimalLog::log10($this->mag));
@@ -441,66 +430,76 @@ final class Decimal implements Stringable
     }
 
     /**
-     * Format a float to match JavaScript's Number.prototype.toString().
-     *
-     * JS rules: no scientific notation for values in [1e-7, 1e21),
-     * scientific notation (lowercase 'e') outside that range, and
-     * exactly the digits needed to round-trip the double.
+     * Print a double as JavaScript's Number#toString() does (ECMA-262,
+     * Number::toString): the fewest digits that read back as the same
+     * double, plain from 1e-6 up to 1e21 and in exponent form outside it.
      */
-    private static function formatFloat(float $value): string
+    private static function jsNumber(float $value): string
     {
-        if ($value === 0.0) {
-            return '0';
-        }
-
         if (is_nan($value)) {
             return 'NaN';
         }
 
-        if (! is_finite($value)) {
+        if ($value === 0.0) {
+            return '0';
+        }
+
+        if (is_infinite($value)) {
             return $value > 0 ? 'Infinity' : '-Infinity';
         }
 
-        $abs = abs($value);
+        // The value is 0.d1d2...dk * 10^n.
+        [$digits, $n] = self::shortestDigits(abs($value));
+        $k = strlen($digits);
+        $sign = $value < 0 ? '-' : '';
 
-        // Integers that fit in a double should format without decimal point
-        if ($abs < 1e21 && $abs >= 1.0 && $abs === floor($abs)) {
-            return (string) (int) $value;
+        if ($k <= $n && $n <= 21) {
+            return $sign . $digits . str_repeat('0', $n - $k);
         }
 
-        // PHP's default (string) uses E+ notation for large/small floats.
-        // JS uses no scientific notation for [1e-7, 1e21).
-        if ($abs < 1e21 && $abs > 1e-7) {
-            // Use sprintf with enough precision to round-trip
-            $str = sprintf('%.17G', $value);
-
-            // Trim trailing zeros after decimal point
-            if (str_contains($str, '.')) {
-                $str = rtrim(rtrim($str, '0'), '.');
-            }
-
-            // If it looks like scientific notation, PHP went there anyway
-            if (str_contains($str, 'E') || str_contains($str, 'e')) {
-                return self::formatScientific($value);
-            }
-
-            return $str;
+        if (0 < $n && $n <= 21) {
+            return $sign . substr($digits, 0, $n) . '.' . substr($digits, $n);
         }
 
-        return self::formatScientific($value);
+        if (-6 < $n && $n <= 0) {
+            return $sign . '0.' . str_repeat('0', -$n) . $digits;
+        }
+
+        $exponent = $n - 1;
+        $mantissa = $k === 1 ? $digits : $digits[0] . '.' . substr($digits, 1);
+
+        return $sign . $mantissa . 'e' . ($exponent < 0 ? '-' : '+') . abs($exponent);
     }
 
-    private static function formatScientific(float $value): string
+    /**
+     * The fewest decimal digits that read back as $value, with the exponent n
+     * that places them: $value = 0.digits * 10^n.
+     *
+     * With serialize_precision at -1, var_export() prints the same shortest
+     * digits V8 does (zend_dtoa's mode 0), but in its own layout, which
+     * switches to exponent form past 15 digits. Only the digits are kept.
+     *
+     * @return array{string, int}
+     */
+    private static function shortestDigits(float $value): array
     {
-        $str = sprintf('%.17E', $value);
-        // Parse mantissa and exponent
-        if (preg_match('/^(-?\d+\.\d+)E([+-]\d+)$/', $str, $m) === 1) {
-            $mantissa = rtrim(rtrim($m[1], '0'), '.');
-            $exp = (int) $m[2];
+        $saved = ini_set('serialize_precision', '-1');
 
-            return $mantissa . 'e' . ($exp >= 0 ? '+' : '') . $exp;
+        try {
+            $printed = var_export($value, true);
+        } finally {
+            if ($saved !== false) {
+                ini_set('serialize_precision', $saved);
+            }
         }
 
-        return str_replace('E', 'e', $str);
+        [$mantissa, $exponent] = array_pad(explode('E', $printed), 2, '0');
+        [$whole, $fraction] = array_pad(explode('.', $mantissa), 2, '');
+
+        $all = $whole . $fraction;
+        $digits = ltrim($all, '0');
+        $n = strlen($whole) + (int) $exponent - (strlen($all) - strlen($digits));
+
+        return [rtrim($digits, '0'), $n];
     }
 }
