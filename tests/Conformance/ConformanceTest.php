@@ -159,7 +159,13 @@ function compareDecimal(string $path, string $actual, string $expected, ?float $
         $de->abs(),
     )->toNumber();
 
-    return $relError > $tolerance
-        ? "{$path}: relative error " . sprintf('%.3e', $relError) . " exceeds {$tolerance}"
-        : null;
+    if ($relError > $tolerance) {
+        return "{$path}: relative error " . sprintf('%.3e', $relError) . " exceeds {$tolerance}";
+    }
+
+    // PHP renders a float differently from JS, so the strings may differ, but
+    // with V8's log10 and pow10 the values must not.
+    return DecimalMath::eq($da, $de)
+        ? null
+        : "{$path}: expected \"{$expected}\", got \"{$actual}\" (relative error " . sprintf('%.3e', $relError) . ')';
 }
