@@ -297,26 +297,23 @@ final class DecimalMath
         if ($a->layer === 0) {
             $newmag = DecimalLog::pow10($a->sign * $a->mag);
             if (is_finite($newmag) && abs($newmag) >= 0.1) {
-                return Decimal::fromComponentsNoNormalize(1.0, 0, $newmag);
+                return Decimal::fromComponents(1.0, 0, $newmag);
             }
 
             if ($a->sign === 0.0) {
                 return Decimal::one();
             }
 
-            return Decimal::fromComponents(
-                $a->sign,
-                $a->layer + 1,
-                DecimalLog::log10($a->mag),
-            );
+            // Out of a double's range: promote a to layer 1 and fall through.
+            $a = Decimal::fromComponentsNoNormalize($a->sign, 1, DecimalLog::log10($a->mag));
         }
 
         if ($a->sign > 0 && $a->mag >= 0) {
-            return Decimal::fromComponentsNoNormalize($a->sign, $a->layer + 1, $a->mag);
+            return Decimal::fromComponents($a->sign, $a->layer + 1, $a->mag);
         }
 
         if ($a->sign < 0 && $a->mag >= 0) {
-            return Decimal::fromComponentsNoNormalize(-$a->sign, $a->layer + 1, -$a->mag);
+            return Decimal::fromComponents(-$a->sign, $a->layer + 1, -$a->mag);
         }
 
         return Decimal::one();
