@@ -9,7 +9,7 @@ use DreadMajesty\Decimal\DecimalMath;
 
 // fixtures/differential.json holds seeded inputs and break_eternity.js's
 // results for them; tools/differential/generate.mjs writes it. Every result
-// must match in sign, layer and mag, bit for bit.
+// must match in sign, layer and mag, bit for bit, and print the same string.
 
 /**
  * Cases known not to match, by name, each with the reason.
@@ -18,7 +18,7 @@ use DreadMajesty\Decimal\DecimalMath;
  */
 const INEXACT = [];
 
-/** @var array{cases: list<array{name: string, op: string, a: list<int|float|string>, b?: list<int|float|string>, want: int|list<int|float|string>}>} $fixture */
+/** @var array{cases: list<array{name: string, op: string, a: list<int|float|string>, b?: list<int|float|string>, want: int|list<int|float|string>, str?: string}>} $fixture */
 $fixture = json_decode(
     (string) file_get_contents(__DIR__ . '/../../fixtures/differential.json'),
     true,
@@ -58,7 +58,7 @@ test('every inexact case names a case in the fixture', function () use ($fixture
 });
 
 /**
- * @param  array{name: string, op: string, a: list<int|float|string>, b?: list<int|float|string>, want: int|list<int|float|string>}  $case
+ * @param  array{name: string, op: string, a: list<int|float|string>, b?: list<int|float|string>, want: int|list<int|float|string>, str?: string}  $case
  */
 function differentialMiss(array $case): ?string
 {
@@ -81,6 +81,7 @@ function differentialMiss(array $case): ?string
         'pow10' => DecimalMath::pow10($a),
         'floor' => DecimalMath::floor($a),
         'ceil' => DecimalMath::ceil($a),
+        'toString' => $a,
     };
 
     /** @var list<int|float|string> $want */
@@ -92,7 +93,11 @@ function differentialMiss(array $case): ?string
         && $got->layer === $expected->layer
         && differentialSame($got->mag, $expected->mag)
     ) {
-        return null;
+        $want = $case['str'] ?? null;
+
+        return $want === null || (string) $got === $want
+            ? null
+            : "want \"{$want}\", got \"{$got}\"";
     }
 
     return sprintf(
