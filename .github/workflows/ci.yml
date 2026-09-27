@@ -67,5 +67,8 @@ jobs:
       - name: Tests
         run: composer test
 
+      - name: Differential against break_eternity.js
+        run: vendor/bin/pest --testsuite=Differential
+
       - name: PHPStan (level 9)
         run: composer types:check
