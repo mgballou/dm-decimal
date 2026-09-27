@@ -104,3 +104,19 @@ test('layer 1 add drops smaller when difference > 17', function (): void {
     $result = DecimalMath::add($a, $b);
     expect((string) $result)->toBe('1e100');
 });
+
+test('layer 2 mul matches break_eternity', function (array $a, array $b, array $expected): void {
+    $result = DecimalMath::mul(
+        Decimal::fromComponents(...$a),
+        Decimal::fromComponents(...$b),
+    );
+    expect([$result->sign, $result->layer, $result->mag])->toBe($expected);
+})->with([
+    // Expected values from break_eternity.js 2.1.3's mul
+    'two tiny values' => [[1.0, 2, -20.0], [1.0, 2, -20.0], [1.0, 2, -20.30102999566398]],
+    'tiny times small' => [[1.0, 2, -20.0], [1.0, 1, -5.0], [1.0, 2, -20.0]],
+    'negative tiny times tiny' => [[-1.0, 2, -20.0], [1.0, 2, -30.0], [-1.0, 2, -30.00000000004343]],
+    'two huge values' => [[1.0, 2, 20.0], [1.0, 2, 20.0], [1.0, 2, 20.30102999566398]],
+    'huge times large' => [[1.0, 2, 20.0], [1.0, 1, 5.0], [1.0, 2, 20.0]],
+    'tiny times its reciprocal' => [[1.0, 2, -20.0], [1.0, 2, 20.0], [1.0, 0, 1.0]],
+]);
