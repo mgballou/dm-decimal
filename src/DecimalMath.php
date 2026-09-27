@@ -86,8 +86,16 @@ final class DecimalMath
 
     public static function add(Decimal $a, Decimal $b): Decimal
     {
-        if ($a->isNan() || $b->isNan()) {
+        // As in break_eternity, an infinite or NaN operand comes back as it
+        // is, whatever the other one holds; only Infinity + -Infinity is NaN.
+        if ($a->mag === INF && $b->mag === INF && $a->sign === -$b->sign) {
             return Decimal::nan();
+        }
+        if ($a->isNan() || $a->isInfinite()) {
+            return $a;
+        }
+        if ($b->isNan() || $b->isInfinite()) {
+            return $b;
         }
 
         if ($a->sign === 0.0) {
@@ -180,8 +188,23 @@ final class DecimalMath
 
     public static function mul(Decimal $a, Decimal $b): Decimal
     {
-        if ($a->isNan() || $b->isNan()) {
+        // break_eternity's order, quirks and all: Infinity times 0 is NaN but
+        // 0 times Infinity is Infinity, and an infinite operand otherwise
+        // comes back as it is, so -1 times Infinity is Infinity.
+        if ($a->mag === INF && $b->mag === INF && $a->sign === -$b->sign) {
+            return Decimal::negInf();
+        }
+        if ($a->mag === INF && $b->isZero()) {
             return Decimal::nan();
+        }
+        if ($a->mag === INF && $b->mag === INF && $a->sign === -1.0 && $b->sign === -1.0) {
+            return Decimal::inf();
+        }
+        if ($a->isNan() || $a->isInfinite()) {
+            return $a;
+        }
+        if ($b->isNan() || $b->isInfinite()) {
+            return $b;
         }
 
         if ($a->sign === 0.0 || $b->sign === 0.0) {
