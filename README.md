@@ -43,8 +43,12 @@ echo $b->mag;     // 600
 needs nothing but PHP.
 
 ```sh
-composer require mgballou/dm-decimal
+composer config repositories.dm-decimal vcs https://github.com/mgballou/dm-decimal
+composer require mgballou/dm-decimal:dev-main
 ```
+
+The package is not yet available on Packagist, so Composer must be told to use
+the GitHub repository and the `main` branch.
 
 PHP 8.3 or 8.4.
 
