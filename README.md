@@ -42,6 +42,34 @@ echo $b->mag;     // 600
 `sign`, `layer` and `mag`. It needs `illuminate/database`; the rest of the package
 needs nothing but PHP.
 
+```php
+use DreadMajesty\Decimal\DecimalCast;
+use DreadMajesty\Decimal\DecimalMath;
+use Illuminate\Database\Eloquent\Model;
+
+// In the migration: $table->json('gold');
+class Player extends Model
+{
+    protected $fillable = ['gold'];
+
+    protected $casts = ['gold' => DecimalCast::class];
+}
+
+$player = Player::create(['gold' => '1e1000']);
+$player->gold = DecimalMath::mul($player->gold, $player->gold);
+$player->save();
+
+echo $player->fresh()->gold;           // 1e2000
+echo $player->getRawOriginal('gold');  // {"sign":1,"layer":1,"mag":2000}
+```
+
+JSON has no number for NaN, the infinities or -0, so the cast stores those as the
+strings `"NaN"`, `"Infinity"`, `"-Infinity"` and `"-0"`. A null column reads as
+zero, and setting null stores zero. A column that holds a plain string such as
+`1e1000` reads through `Decimal::fromString`, so a string column can take the cast
+in place. JSON missing `sign`, `layer` or `mag` throws an `UnexpectedValueException`
+rather than reading as zero.
+
 ## Install
 
 The package is not on Packagist yet, so point Composer at this repository in
