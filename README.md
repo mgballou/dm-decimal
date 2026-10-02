@@ -96,6 +96,35 @@ fewest that round-trip.
 
 CI runs all ten on PHP 8.3 and 8.4, next to the unit tests and PHPStan at level 9.
 
+## How the differential test ties it to break_eternity.js
+
+The vectors reach only the operations the engine's ten scenarios happen to use.
+`tests/Differential` reaches the rest: `fixtures/differential.json` holds 5,902
+seeded cases across every operation listed above, with inputs at layer 0, layer 1
+and layer 2 and the edge cases (zero, negatives, 1e308 and past it, infinity). Each
+case records break_eternity.js 2.1.3's result, and the test holds the PHP result to
+it in sign, layer and mag, bit for bit. All 5,902 match. A case that ever cannot
+match goes in the test's `INEXACT` list by name, with the reason.
+
+That includes break_eternity's quirks at infinity, which this package keeps so a
+server agrees with a client: `-1 * Infinity` is `Infinity`, `0 * Infinity` is
+`Infinity`, and `Infinity * 0` is NaN.
+
+break_eternity.js keeps a NaN or infinite layer; this package stores the layer as
+an `int`, so the test reads a NaN layer as `Decimal::nan()`'s 0 and an infinite
+one as `Decimal::inf()`'s `PHP_INT_MAX`.
+
+The fixture is committed, so CI needs no Node. To regenerate it, run the generator
+under Node 22 on x64 (on Apple silicon, the x64 build runs under Rosetta):
+
+```sh
+cd tools/differential
+npm ci
+npm run generate
+```
+
+It refuses any other Node or architecture, for the reasons in the next section.
+
 ## How log10 and pow10 match V8
 
 break_eternity.js calls V8's `Math.log10` and `Math.pow(10, x)`. PHP's `log10()`
@@ -122,6 +151,7 @@ with them.
 composer install
 composer test               # unit tests and the vectors
 composer test:conformance   # the vectors alone
+composer test:differential  # the break_eternity.js cases alone
 composer types:check        # PHPStan, level 9
 ```
 

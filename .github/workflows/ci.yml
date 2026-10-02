@@ -60,5 +60,8 @@ jobs:
       - name: Conformance vectors
         run: vendor/bin/pest --testsuite=Conformance
 
+      - name: Differential against break_eternity.js
+        run: vendor/bin/pest --testsuite=Differential
+
       - name: PHPStan (level 9)
         run: vendor/bin/phpstan analyse --memory-limit=2G --no-progress

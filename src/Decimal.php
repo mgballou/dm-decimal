@@ -10,7 +10,7 @@ final class Decimal implements Stringable
 {
     private const float EXP_LIMIT = 9e15;
 
-    private const float LAYER_DOWN = 15.954589770191003; // log10(9e15)
+    private const float LAYER_DOWN = 15.954242509439325; // log10(9e15)
 
     private const float FIRST_NEG_LAYER = 1.1111111111111112e-16; // 1 / 9e15
 
