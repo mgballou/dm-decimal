@@ -87,23 +87,25 @@ TypeScript produced.
 | Vectors | Match | What they reach |
 |---|---|---|
 | 6 | exact, string for string | layer 0: first cycle, five minutes, thirty minutes, two hours, after a prestige, one edge case |
-| 4 | exact in value, and within 1e-11 relative | log space: three runs that climb past 9e15 (as far as 1e100), one edge case |
+| 4 | exact, string for string (the engine asks only 1e-11 relative) | log space: three runs that climb past 9e15 (as far as 1e100), one edge case |
 
-The four log-space vectors match value for value, but not always string for
-string: PHP prints `9000000000000007` where JavaScript prints
-`9.000000000000007e15`, and it prints 17 digits where JavaScript stops at the
-fewest that round-trip.
+All ten print what JavaScript prints, because `Decimal` prints a number as
+break_eternity.js 2.1.3 does. At each place break_eternity.js calls
+`Number#toString()`, this package prints the fewest digits that read back as
+the same double, and switches to exponent form below 1e-6 and from 1e21, as
+JavaScript does.
 
 CI runs all ten on PHP 8.3 and 8.4, next to the unit tests and PHPStan at level 9.
 
 ## How the differential test ties it to break_eternity.js
 
 The vectors reach only the operations the engine's ten scenarios happen to use.
-`tests/Differential` reaches the rest: `fixtures/differential.json` holds 5,902
-seeded cases across every operation listed above, with inputs at layer 0, layer 1
-and layer 2 and the edge cases (zero, negatives, 1e308 and past it, infinity). Each
-case records break_eternity.js 2.1.3's result, and the test holds the PHP result to
-it in sign, layer and mag, bit for bit. All 5,902 match. A case that ever cannot
+`tests/Differential` reaches the rest: `fixtures/differential.json` holds 6,239
+seeded cases across every operation listed above and `toString`, with inputs at
+layer 0, layer 1 and layer 2 and the edge cases (zero, negatives, 1e308 and past
+it, infinity). Each case records break_eternity.js 2.1.3's result and the string
+it prints, and the test holds the PHP result to it in sign, layer and mag, bit for
+bit, and in the string, character for character. All 6,239 match. A case that ever cannot
 match goes in the test's `INEXACT` list by name, with the reason.
 
 That includes break_eternity's quirks at infinity, which this package keeps so a
