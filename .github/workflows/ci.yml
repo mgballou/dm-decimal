@@ -10,13 +10,16 @@ permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.event.pull_request.draft }}
   cancel-in-progress: true
 
 jobs:
+  # A PR behind its base is not a failure: the gate passes with a notice and
+  # skips the test jobs, so a stale branch never turns the run red.
   gate:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
+    timeout-minutes: 3
     permissions:
       contents: read
     outputs:
@@ -25,15 +28,24 @@ jobs:
       - id: base
         env:
           GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BASE: ${{ github.base_ref }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          behind=$(gh api "repos/${{ github.repository }}/compare/${{ github.base_ref }}...${{ github.event.pull_request.head.sha }}" --jq .behind_by)
-          if [ "$behind" = "0" ]; then echo "run=true" >> "$GITHUB_OUTPUT"
-          else echo "::notice::This branch is $behind commits behind ${{ github.base_ref }}. Update it to run CI."; echo "run=false" >> "$GITHUB_OUTPUT"; fi
+          behind=$(gh api "repos/$REPO/compare/$BASE...$HEAD_SHA" --jq .behind_by)
+          if [ "$behind" = "0" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::This branch is $behind commits behind $BASE. Update it to run CI."
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+
   check:
     needs: gate
     if: needs.gate.outputs.run == 'true'
     name: PHP ${{ matrix.php }}
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
@@ -54,11 +66,8 @@ jobs:
       - name: Install PHP dependencies
         uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda # v4.0.0
 
-      - name: Unit tests
-        run: vendor/bin/pest --testsuite=Unit
-
-      - name: Conformance vectors
-        run: vendor/bin/pest --testsuite=Conformance
+      - name: Tests
+        run: composer test
 
       - name: PHPStan (level 9)
-        run: vendor/bin/phpstan analyse --memory-limit=2G --no-progress
+        run: composer types:check
