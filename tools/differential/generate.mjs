@@ -1,5 +1,6 @@
 // Writes fixtures/differential.json: seeded inputs run through break_eternity.js,
-// with every result recorded as sign, layer and mag for the PHP test to match.
+// with every result recorded as sign, layer and mag, and as the string
+// break_eternity.js prints, for the PHP test to match.
 //
 // Run it with Node 22 on x64. Node 24 sends Math.pow to the platform's libm,
 // and Node 22's arm64 build fuses multiply-adds; both change pow10 results.
@@ -82,6 +83,7 @@ const OPS = {
     pow10: (a) => Decimal.pow10(a),
     floor: (a) => a.floor(),
     ceil: (a) => a.ceil(),
+    toString: (a) => a,
 };
 
 const cases = [];
@@ -90,7 +92,12 @@ function record(name, op, a, b) {
     const result = b === undefined ? OPS[op](a) : OPS[op](a, b);
     const entry = { name, op, a: triple(a) };
     if (b !== undefined) entry.b = triple(b);
-    entry.want = typeof result === 'number' ? result : triple(result);
+    if (typeof result === 'number') {
+        entry.want = result;
+    } else {
+        entry.want = triple(result);
+        entry.str = result.toString();
+    }
     cases.push(entry);
 }
 
@@ -156,6 +163,26 @@ for (const op of Object.keys(OPS)) {
         for (const [nb, b] of Object.entries(EDGES)) {
             record(`${op}/edge/${na},${nb}`, op, a, b);
         }
+    }
+}
+
+// toString alone, where JavaScript's Number#toString changes form: layer 0
+// around 1e-7, 1e-6 and 9e15, whole and fractional numbers, and every layer
+// from 1 to 8, past MAX_ES_IN_A_ROW's 5.
+const PRINT_KINDS = {
+    tiny: () => Decimal.fromNumber(sign() * 10 ** uniform(-15.9, -5)),
+    whole: () => Decimal.fromNumber(sign() * Math.round(10 ** uniform(0, 15.95))),
+    fraction: () => Decimal.fromNumber(sign() * Math.round(10 ** uniform(0, 12)) / 10 ** Math.round(uniform(1, 8))),
+    L0: KINDS.L0,
+    L1: KINDS.L1,
+    L1whole: () => Decimal.fromComponents(sign(), 1, Math.round(uniform(16, 1e6))),
+    L2: KINDS.L2,
+    high: () => Decimal.fromComponents(sign(), Math.round(uniform(3, 8)), uniform(1.21, 9e15)),
+};
+
+for (const [ka, draw] of Object.entries(PRINT_KINDS)) {
+    for (let i = 0; i < 40; i++) {
+        record(`toString/${ka}/${pad(i)}`, 'toString', draw());
     }
 }
 

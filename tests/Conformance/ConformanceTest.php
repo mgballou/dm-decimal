@@ -139,19 +139,21 @@ foreach ($vectorFile['vectors'] as $vector) {
 
 function compareDecimal(string $path, string $actual, string $expected, ?float $tolerance): ?string
 {
-    if ($tolerance === null) {
-        return $actual !== $expected
-            ? "{$path}: expected \"{$expected}\", got \"{$actual}\""
-            : null;
+    if ($actual === $expected) {
+        return null;
     }
 
+    if ($tolerance === null) {
+        return "{$path}: expected \"{$expected}\", got \"{$actual}\"";
+    }
+
+    // Every vector must print what break_eternity.js prints. For a toleranced
+    // vector, say how far apart the values are too.
     $da = Decimal::fromString($actual);
     $de = Decimal::fromString($expected);
 
     if (DecimalMath::eq($de, Decimal::zero())) {
-        return DecimalMath::eq($da, Decimal::zero())
-            ? null
-            : "{$path}: expected 0, got \"{$actual}\"";
+        return "{$path}: expected 0, got \"{$actual}\"";
     }
 
     $relError = DecimalMath::div(
@@ -159,13 +161,9 @@ function compareDecimal(string $path, string $actual, string $expected, ?float $
         $de->abs(),
     )->toNumber();
 
-    if ($relError > $tolerance) {
-        return "{$path}: relative error " . sprintf('%.3e', $relError) . " exceeds {$tolerance}";
-    }
+    $detail = $relError > $tolerance
+        ? 'relative error ' . sprintf('%.3e', $relError) . " exceeds {$tolerance}"
+        : (DecimalMath::eq($da, $de) ? 'same value' : 'relative error ' . sprintf('%.3e', $relError));
 
-    // PHP renders a float differently from JS, so the strings may differ, but
-    // with V8's log10 and pow10 the values must not.
-    return DecimalMath::eq($da, $de)
-        ? null
-        : "{$path}: expected \"{$expected}\", got \"{$actual}\" (relative error " . sprintf('%.3e', $relError) . ')';
+    return "{$path}: expected \"{$expected}\", got \"{$actual}\" ({$detail})";
 }
