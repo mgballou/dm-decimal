@@ -17,6 +17,37 @@ it lands on the TypeScript engine's results.</p>
 
 <br />
 
+## Installation
+
+The package requires PHP 8.3 or later. The core has no runtime dependencies.
+`DecimalCast` uses `illuminate/database` and is optional.
+
+Until the package is listed on Packagist, add this VCS repository to your
+`composer.json` so Composer can install directly from GitHub without an API
+token:
+
+```json
+"repositories": [
+    {
+        "type": "vcs",
+        "url": "https://github.com/mgballou/dm-decimal",
+        "no-api": true
+    }
+]
+```
+
+Then require the development branch:
+
+```sh
+composer require mgballou/dm-decimal:dev-main
+```
+
+After it is listed on Packagist, install the first release with:
+
+```sh
+composer require mgballou/dm-decimal
+```
+
 ## What it is
 
 `Decimal` is an immutable value with three fields. At layer 0, `mag` is the number
@@ -69,31 +100,6 @@ zero, and setting null stores zero. A column that holds a plain string such as
 `1e1000` reads through `Decimal::fromString`, so a string column can take the cast
 in place. JSON missing `sign`, `layer` or `mag` throws an `UnexpectedValueException`
 rather than reading as zero.
-
-## Install
-
-The package is not on Packagist yet, so point Composer at this repository in
-your `composer.json`:
-
-```json
-"repositories": [
-    {
-        "type": "vcs",
-        "url": "https://github.com/mgballou/dm-decimal",
-        "no-api": true
-    }
-]
-```
-
-`no-api` has Composer clone over plain HTTPS, so it needs no GitHub token. Then:
-
-```sh
-composer require mgballou/dm-decimal:dev-main
-```
-
-Once it reaches Packagist, `composer require mgballou/dm-decimal` alone will do.
-
-PHP 8.3 or later; CI tests 8.3 and 8.4.
 
 ## How the vectors tie it to the engine
 

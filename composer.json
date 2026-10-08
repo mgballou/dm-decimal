@@ -1,13 +1,9 @@
 {
     "name": "mgballou/dm-decimal",
-    "description": "A PHP port of break_eternity's three-field Decimal, held to the Dread Majesty engine's conformance vectors.",
+    "description": "Layered decimal arithmetic for PHP, ported from break_eternity.js with an optional Eloquent cast.",
     "type": "library",
-    "keywords": ["decimal", "break_eternity", "incremental", "idle-game", "big-numbers"],
+    "keywords": ["decimal", "break_eternity", "incremental", "idle-game", "big-numbers", "laravel", "eloquent"],
     "homepage": "https://github.com/mgballou/dm-decimal",
-    "support": {
-        "issues": "https://github.com/mgballou/dm-decimal/issues",
-        "source": "https://github.com/mgballou/dm-decimal"
-    },
     "license": "MIT",
     "authors": [
         {
@@ -23,7 +19,7 @@
         "phpstan/phpstan": "^2.0"
     },
     "suggest": {
-        "illuminate/database": "Required to store a Decimal on an Eloquent model with DecimalCast."
+        "illuminate/database": "^12.0 or ^13.0 is required only to use DecimalCast with Eloquent."
     },
     "autoload": {
         "psr-4": {
@@ -48,5 +44,10 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "support": {
+        "docs": "https://github.com/mgballou/dm-decimal#readme",
+        "issues": "https://github.com/mgballou/dm-decimal/issues",
+        "source": "https://github.com/mgballou/dm-decimal"
+    }
 }
