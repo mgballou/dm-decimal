@@ -4,6 +4,10 @@
     "type": "library",
     "keywords": ["decimal", "break_eternity", "incremental", "idle-game", "big-numbers"],
     "homepage": "https://github.com/mgballou/dm-decimal",
+    "support": {
+        "issues": "https://github.com/mgballou/dm-decimal/issues",
+        "source": "https://github.com/mgballou/dm-decimal"
+    },
     "license": "MIT",
     "authors": [
         {
