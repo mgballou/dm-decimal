@@ -97,7 +97,7 @@ final class Decimal implements Stringable
         if ($eCount === 0) {
             $num = (float) $value;
             if (is_nan($num) || ! is_finite($num)) {
-                return $num === 0.0 ? self::zero() : self::nan();
+                return self::nan();
             }
 
             return $num === 0.0
@@ -366,7 +366,7 @@ final class Decimal implements Stringable
 
     private static function normalize(float $sign, int $layer, float $mag): self
     {
-        if (is_nan($sign) || is_nan($layer) || is_nan($mag)) {
+        if (is_nan($sign) || is_nan($mag)) {
             return self::nan();
         }
 
@@ -378,7 +378,7 @@ final class Decimal implements Stringable
             return self::zero();
         }
 
-        if (! is_finite($mag) || ! is_finite($layer)) {
+        if (! is_finite($mag)) {
             return $sign > 0 ? self::inf() : self::negInf();
         }
 
