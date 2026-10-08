@@ -1,0 +1,15 @@
+{
+    "name": "dm-decimal-differential",
+    "private": true,
+    "type": "module",
+    "description": "Writes fixtures/differential.json from break_eternity.js for the differential test.",
+    "engines": {
+        "node": "22.x"
+    },
+    "scripts": {
+        "generate": "node generate.mjs"
+    },
+    "dependencies": {
+        "break_eternity.js": "2.1.3"
+    }
+}

@@ -38,6 +38,7 @@
     "scripts": {
         "test": "pest",
         "test:conformance": "pest --testsuite=Conformance",
+        "test:differential": "pest --testsuite=Differential",
         "types:check": "phpstan analyse --memory-limit=2G"
     },
     "config": {

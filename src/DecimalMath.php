@@ -86,8 +86,16 @@ final class DecimalMath
 
     public static function add(Decimal $a, Decimal $b): Decimal
     {
-        if ($a->isNan() || $b->isNan()) {
+        // As in break_eternity, an infinite or NaN operand comes back as it
+        // is, whatever the other one holds; only Infinity + -Infinity is NaN.
+        if ($a->mag === INF && $b->mag === INF && $a->sign === -$b->sign) {
             return Decimal::nan();
+        }
+        if ($a->isNan() || $a->isInfinite()) {
+            return $a;
+        }
+        if ($b->isNan() || $b->isInfinite()) {
+            return $b;
         }
 
         if ($a->sign === 0.0) {
@@ -180,8 +188,23 @@ final class DecimalMath
 
     public static function mul(Decimal $a, Decimal $b): Decimal
     {
-        if ($a->isNan() || $b->isNan()) {
+        // break_eternity's order, quirks and all: Infinity times 0 is NaN but
+        // 0 times Infinity is Infinity, and an infinite operand otherwise
+        // comes back as it is, so -1 times Infinity is Infinity.
+        if ($a->mag === INF && $b->mag === INF && $a->sign === -$b->sign) {
+            return Decimal::negInf();
+        }
+        if ($a->mag === INF && $b->isZero()) {
             return Decimal::nan();
+        }
+        if ($a->mag === INF && $b->mag === INF && $a->sign === -1.0 && $b->sign === -1.0) {
+            return Decimal::inf();
+        }
+        if ($a->isNan() || $a->isInfinite()) {
+            return $a;
+        }
+        if ($b->isNan() || $b->isInfinite()) {
+            return $b;
         }
 
         if ($a->sign === 0.0 || $b->sign === 0.0) {
@@ -297,26 +320,23 @@ final class DecimalMath
         if ($a->layer === 0) {
             $newmag = DecimalLog::pow10($a->sign * $a->mag);
             if (is_finite($newmag) && abs($newmag) >= 0.1) {
-                return Decimal::fromComponentsNoNormalize(1.0, 0, $newmag);
+                return Decimal::fromComponents(1.0, 0, $newmag);
             }
 
             if ($a->sign === 0.0) {
                 return Decimal::one();
             }
 
-            return Decimal::fromComponents(
-                $a->sign,
-                $a->layer + 1,
-                DecimalLog::log10($a->mag),
-            );
+            // Out of a double's range: promote a to layer 1 and fall through.
+            $a = Decimal::fromComponentsNoNormalize($a->sign, 1, DecimalLog::log10($a->mag));
         }
 
         if ($a->sign > 0 && $a->mag >= 0) {
-            return Decimal::fromComponentsNoNormalize($a->sign, $a->layer + 1, $a->mag);
+            return Decimal::fromComponents($a->sign, $a->layer + 1, $a->mag);
         }
 
         if ($a->sign < 0 && $a->mag >= 0) {
-            return Decimal::fromComponentsNoNormalize(-$a->sign, $a->layer + 1, -$a->mag);
+            return Decimal::fromComponents(-$a->sign, $a->layer + 1, -$a->mag);
         }
 
         return Decimal::one();
