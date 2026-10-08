@@ -48,5 +48,10 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "support": {
+        "docs": "https://github.com/mgballou/dm-decimal#readme",
+        "issues": "https://github.com/mgballou/dm-decimal/issues",
+        "source": "https://github.com/mgballou/dm-decimal"
+    }
 }
