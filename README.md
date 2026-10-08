@@ -17,6 +17,26 @@ it lands on the TypeScript engine's results.</p>
 
 <br />
 
+## Installation
+
+### Install from GitHub (available now)
+
+Until the package is listed on Packagist, point Composer at this GitHub repository
+and require its `main` branch:
+
+```sh
+composer config repositories.dm-decimal vcs https://github.com/mgballou/dm-decimal
+composer require mgballou/dm-decimal:dev-main
+```
+
+### Install from Packagist (after listing)
+
+After the package is listed on Packagist, install the latest release with:
+
+```sh
+composer require mgballou/dm-decimal
+```
+
 ## What it is
 
 `Decimal` is an immutable value with three fields. At layer 0, `mag` is the number
